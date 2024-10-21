@@ -1,5 +1,6 @@
 describe('Détail produit', () => {
-    beforeEach(() => {   
+    beforeEach(() => {  
+      cy.visit(Cypress.env('login_url'))
       cy.connect()
       cy.visit('http://localhost:8080/#/products/6')
     })
