@@ -14,7 +14,7 @@ describe('Connection', () => {
         })
 
         it('Cliquer sur connexion pour aller à la page de connexion', () => {    
-            
+
             cy.contains("a", "Connexion")
             .should("have.attr", "href", "#/login")
             .click()
@@ -30,7 +30,6 @@ describe('Connection', () => {
             cy.contains("a", "Mon panier")
             .should("have.attr", "href", "#/cart")  
         })    
-
 
   })
   

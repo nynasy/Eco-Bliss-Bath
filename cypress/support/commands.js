@@ -41,9 +41,44 @@ Cypress.Commands.add('login', () => {
       })
  })
 
- Cypress.Commands.add('connect', () => {
+ Cypress.Commands.add('emptyCart', () => {
 
-  cy.visit(Cypress.env('login_url'))
+  cy.login()
+  
+  cy.getLocalStorage('token').then(token => {
+    console.log('token', token)
+ 
+    cy.request(
+      {
+        url : "/orders",
+        failOnStatusCode: false,
+        headers : {
+            Authorization: 'Bearer ' + token
+        }
+      }
+    )
+    .then((orders) => {
+      cy.log("orders : " + orders.id)
+      orders.body.orderLines.map(product => {
+          cy.log("delete product : " + product.id)
+          cy.request(
+            {
+              method: 'DELETE',
+              url : `/orders/${product.id}/delete`,
+              failOnStatusCode: false,
+              headers : {
+                  Authorization: 'Bearer ' + token
+              }
+            }
+          )  
+        })  
+    });
+  })
+
+})
+
+
+ Cypress.Commands.add('connect', () => {
 
   cy.contains('Email')
   .parent()
@@ -57,7 +92,9 @@ Cypress.Commands.add('login', () => {
 
   cy.contains('Se connecter')
   .parent()
-  .find('button')   
+  .find('button')  
+  .should("be.visible")
+  .wait(1000) 
   .click() 
   
 })
