@@ -7,18 +7,21 @@ describe('Page Login', () => {
       cy.contains('Email')
       .parent()
       .find('input[type=text]')    
+      //TODO data-cy check
     })
 
     it('vérifiez la présence du champ Mot de passe', () => {
       cy.contains('Mot de passe')
       .parent()
       .find('input[type=password]')    
+      //TODO data-cy check
     })
 
     it('vérifiez la présence du bouton Se connecter', () => {
       cy.contains('Se connecter')
       .parent()
       .find('button')    
+      //TODO data-cy check
     })
 
   })

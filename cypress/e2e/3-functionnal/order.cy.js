@@ -1,80 +1,115 @@
-//
 
-/*vous êtes connectés avec les infos données précédemment ;
-○ cliquez sur un des produits ;
-○ le stock doit être supérieur à 1 pour pouvoir être ajouté ;
-○ cliquez sur ajouter pour ajouter au panier :
-■ vérifiez que le produit a été ajouté au panier,
-■ retournez sur la page du produit et vérifiez que le stock a
-enlevé le nombre de produits qui sont dans le panier,
-■ vérifiez les limites
-● entrez un chiffre négatif,
-● entrez un chiffre supérieur à 20 ;
-○ Ajout d’un élément au panier (clic bouton ajouter au panier,
-vérification du contenu du panier via l’A*/
 
 describe('Ajout panier', () => {    
 
-    before(() => {                  
+    beforeEach(() => {   
         cy.emptyCart()
-    })
 
-    it("Ajout d'un produit disponible", () => {
-        
         cy.log("Aller sur la page de connexion")        
         cy.visit(Cypress.env('login_url'))
 
         cy.log("remplir le formulaire de connexion et cliquer sur se connecter")
         cy.connect()            
 
-        cy.log("on vérifie que le lien 'Mon panier' est bien visible")
+        cy.log("vérifier que le lien 'Mon panier' est bien visible")
         cy.contains("a", "Mon panier")
         .should("have.attr", "href", "#/cart")  
 
         cy.log("aller sur la page liste de produits")
         cy.visit('http://localhost:8080/#/products')
-        
-        cy.log("cliquez sur un produit disponible : id = 8")
+
+        cy.log("cliquer sur un produit disponible : id = 8")
         cy.get('button[ng-reflect-router-link="/products,8"]')
         .should("be.visible")
-        .wait(1000)
-        .click()  
-
-        cy.log("vérifier qu'on est dans la page détail du produit")
-        cy.url().should('eq', 'http://localhost:8080/#/products/8') 
-
+        .click()          
+     
         cy.log("vérifier le stock avant ajout = 6")
         cy.contains('6 en stock')
 
+    })  
+
+
+     it("Ajout d'un produit disponible", () => {         
+        
+        cy.log("Saisie d'un quantité positive")
+        cy.get('input[type="number"]')
+        .clear()
+        .type("1")
         
         cy.log("cliquer sur le bouton 'Ajouter panier'")
         cy.contains('Ajouter au panier')
         .should("be.visible")
         .parent()
         .find('button')
-        .wait(1000)
         .click()    
 
-        cy.log("vérifier qu'on est dans la page du panier")
-        cy.url().should('eq', 'http://localhost:8080/#/cart')  
-
-
-        cy.log("vérifier que le produit est présent par son nom")
-        cy.contains('Milkyway')
-
-        cy.log("vérifier que la quantité est égale à 1")
-        cy.get('input[type="number"]')
-        .should('have.value', 1)
-
-        cy.log("retourner sur la page du produit")
-        cy.visit('http://localhost:8080/#/products/8')
-
+        cy.reload()
 
         cy.log("vérifier que le stock aprés ajout = 5")
         cy.contains('5 en stock')
 
-    })    
- 
+        cy.visit('http://localhost:8080/#/cart')
+        cy.log("vérifier que le produit a ajouté dans le panier")
+        cy.contains('Milkyway')
+
+        cy.log("vérifier dans le panier que la quantité est égale à 1")
+        cy.get('input[type="number"]')
+        .should('have.value', 1)
+
+    }) 
+
+    it("Ajout d'un produit avec quantité négative", () => {    
+
+        cy.log("Saisie d'un quantité négative")
+
+        cy.get('input[type="number"]')
+        .clear()
+        .type("-1")
+
+        cy.log("cliquer sur le bouton 'Ajouter panier'")
+        cy.contains('Ajouter au panier')
+        .should("be.visible")
+        .parent()
+        .find('button')
+        .click()    
+
+        cy.reload()
+
+        cy.log("vérifier que le stock n'est pas modifié")
+        cy.contains('6 en stock')    
+        
+        cy.visit('http://localhost:8080/#/cart')            
+
+        cy.log("vérifier que le produit n'a pas été ajouté au panier")
+        cy.contains('Milkyway').should('not.exist')
+
+    }) 
+
+    it("Ajout d'un produit avec quantité supérieure à 20", () => {    
+
+        cy.get('input[type="number"]')
+        .clear()
+        .type("21")
+
+        cy.log("cliquer sur le bouton 'Ajouter panier'")
+        cy.contains('Ajouter au panier')
+        .should("be.visible")
+        .parent()
+        .find('button')
+        .click()    
+
+        cy.reload()
+
+        cy.log("vérifier que le stock n'est pas modifié")
+        cy.contains('6 en stock')    
+        
+        cy.visit('http://localhost:8080/#/cart')            
+
+        cy.log("vérifier que le produit n'a pas été ajouté au panier")
+        cy.contains('Milkyway').should('not.exist')
+
+    }) 
+
 
 
 })

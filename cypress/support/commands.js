@@ -59,12 +59,12 @@ Cypress.Commands.add('login', () => {
     )
     .then((orders) => {
       cy.log("orders : " + orders.id)
-      orders.body.orderLines.map(product => {
-          cy.log("delete product : " + product.id)
+      orders.body.orderLines.map(line => {
+          cy.log("delete order line : " + line.id)
           cy.request(
             {
               method: 'DELETE',
-              url : `/orders/${product.id}/delete`,
+              url : `/orders/${line.id}/delete`,
               failOnStatusCode: false,
               headers : {
                   Authorization: 'Bearer ' + token
