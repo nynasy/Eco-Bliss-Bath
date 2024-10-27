@@ -24,7 +24,7 @@ describe('Connection', () => {
         })
 
         it("Se connecter et vérifier la présence du lien 'Mon panier'", () => {
-   
+            cy.visit(Cypress.env('login_url'))
             cy.connect()   
             
             cy.contains("a", "Mon panier")

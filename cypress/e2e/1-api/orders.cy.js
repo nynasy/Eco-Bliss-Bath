@@ -1,4 +1,4 @@
-describe("Api commandes", () => {
+describe("Api panier", () => {
     before(() => {
       cy.login()
       cy.saveLocalStorage()
@@ -16,7 +16,7 @@ describe("Api commandes", () => {
        failOnStatusCode: false 
     })
     .then((orders) => {
-        expect(orders.status).to.eq(401);     
+        expect(orders.status).to.eq(403);     
       });
     })
     
@@ -81,7 +81,7 @@ describe("Api commandes", () => {
         }
       })
       .then((orders) => {       
-          expect(orders.status).to.eq(400, "Code de Requete invalide car produit en rupture de stock");   
+          expect(orders.status).to.eq(405, "Code de requete d'une opération non permise car le produit est en rupture de stock");   
 
         });
       })

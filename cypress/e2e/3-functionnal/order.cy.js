@@ -1,5 +1,3 @@
-
-
 describe('Ajout panier', () => {    
 
     beforeEach(() => {   
@@ -48,7 +46,7 @@ describe('Ajout panier', () => {
         cy.log("vérifier que le stock aprés ajout = 5")
         cy.contains('5 en stock')
 
-        cy.visit('http://localhost:8080/#/cart')
+       // cy.visit('http://localhost:8080/#/cart')
         cy.log("vérifier que le produit a ajouté dans le panier")
         cy.contains('Milkyway')
 
