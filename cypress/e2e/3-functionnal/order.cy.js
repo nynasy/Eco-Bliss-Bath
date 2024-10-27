@@ -26,7 +26,6 @@ describe('Ajout panier', () => {
 
     })  
 
-
      it("Ajout d'un produit disponible", () => {         
         
         cy.log("Saisie d'un quantité positive")
@@ -39,20 +38,25 @@ describe('Ajout panier', () => {
         .should("be.visible")
         .parent()
         .find('button')
+        .wait(1000)
         .click()    
 
-        cy.reload()
+        cy.url().then((page) => {
+            cy.log(page);  
 
-        cy.log("vérifier que le stock aprés ajout = 5")
-        cy.contains('5 en stock')
+            cy.reload()
+            cy.log("vérifier que le stock aprés ajout = 5")
+            cy.contains('5 en stock')           
 
-       // cy.visit('http://localhost:8080/#/cart')
-        cy.log("vérifier que le produit a ajouté dans le panier")
+        })
+
+        cy.visit('http://localhost:8080/#/cart')
+        cy.log("vérifier que le produit a été ajouté dans le panier")
         cy.contains('Milkyway')
 
         cy.log("vérifier dans le panier que la quantité est égale à 1")
         cy.get('input[type="number"]')
-        .should('have.value', 1)
+        .should('have.value', 1)   
 
     }) 
 

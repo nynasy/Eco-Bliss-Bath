@@ -1,2 +1,0 @@
---reporter mochawesome
---reporter-options reportDir=reports/mochawesome,overwrite=false,html=true,json=false
