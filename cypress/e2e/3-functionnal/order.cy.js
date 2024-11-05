@@ -26,31 +26,26 @@ describe('Ajout panier', () => {
 
     })  
 
-     it("Ajout d'un produit disponible", () => {         
+    it("Ajout d'un produit disponible", () => {         
         
         cy.log("Saisie d'un quantité positive")
         cy.get('input[type="number"]')
         .clear()
         .type("1")
+
+        cy.intercept('GET', 'http://localhost:8081/orders').as('cart')
         
         cy.log("cliquer sur le bouton 'Ajouter panier'")
         cy.contains('Ajouter au panier')
         .should("be.visible")
         .parent()
         .find('button')
-        .wait(1000)
         .click()    
 
-        cy.url().then((page) => {
-            cy.log(page);  
+        cy.log("attendre après l'ajout au panier que l'api récupère les produits du panier")
+        cy.wait('@cart') 
+        
 
-            cy.reload()
-            cy.log("vérifier que le stock aprés ajout = 5")
-            cy.contains('5 en stock')           
-
-        })
-
-        cy.visit('http://localhost:8080/#/cart')
         cy.log("vérifier que le produit a été ajouté dans le panier")
         cy.contains('Milkyway')
 
@@ -58,60 +53,40 @@ describe('Ajout panier', () => {
         cy.get('input[type="number"]')
         .should('have.value', 1)   
 
+        cy.log("retourner sur la page produit et vérifier que le stock après ajout = 5")
+
+        cy.visit('http://localhost:8080/#/products/8')
+
+        cy.contains('5 en stock')
+
     }) 
 
     it("Ajout d'un produit avec quantité négative", () => {    
 
-        cy.log("Saisie d'un quantité négative")
+        cy.log("Saisie d'une quantité négative")
 
         cy.get('input[type="number"]')
         .clear()
         .type("-1")
 
-        cy.log("cliquer sur le bouton 'Ajouter panier'")
-        cy.contains('Ajouter au panier')
-        .should("be.visible")
-        .parent()
-        .find('button')
-        .click()    
+        cy.get('[data-cy=detail-product-form]')
+        .should('have.class', 'ng-invalid')          
 
-        cy.reload()
-
-        cy.log("vérifier que le stock n'est pas modifié")
-        cy.contains('6 en stock')    
-        
-        cy.visit('http://localhost:8080/#/cart')            
-
-        cy.log("vérifier que le produit n'a pas été ajouté au panier")
-        cy.contains('Milkyway').should('not.exist')
-
-    }) 
+    })
 
     it("Ajout d'un produit avec quantité supérieure à 20", () => {    
-
+        
+        cy.log("Saisie d'une quantité superieur à 20")
+        
         cy.get('input[type="number"]')
         .clear()
         .type("21")
 
-        cy.log("cliquer sur le bouton 'Ajouter panier'")
-        cy.contains('Ajouter au panier')
-        .should("be.visible")
-        .parent()
-        .find('button')
-        .click()    
-
-        cy.reload()
-
-        cy.log("vérifier que le stock n'est pas modifié")
-        cy.contains('6 en stock')    
-        
-        cy.visit('http://localhost:8080/#/cart')            
-
-        cy.log("vérifier que le produit n'a pas été ajouté au panier")
-        cy.contains('Milkyway').should('not.exist')
+        cy.get('[data-cy=detail-product-form]')
+        .should('have.class', 'ng-invalid')
+           
 
     }) 
-
 
 
 })

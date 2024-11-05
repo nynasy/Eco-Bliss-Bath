@@ -174,7 +174,7 @@ describe("Api avis", () => {
       })
     })   
 
-    it("Ajouter un avis avec une chaîne non numerique dans la note", () => {
+    it("Ajouter un avis avec une note non numérique", () => {
       cy.getLocalStorage('token').then(token => {
         console.log('token', token)
      
@@ -200,7 +200,7 @@ describe("Api avis", () => {
     })   
 
 
-    it("Ajouter un avis avec une chaîne de plus de 255 caractères", () => {
+    it("Ajouter un avis avec un titre de plus de 255 caractères", () => {
       cy.getLocalStorage('token').then(token => {
         console.log('token', token)
      
@@ -226,11 +226,30 @@ describe("Api avis", () => {
     })   
 
 
+    it("Ajouter un avis avec un commentaire de plus de 506 caractères", () => {
+      cy.getLocalStorage('token').then(token => {
+        console.log('token', token)
+     
+        cy.request({
+        method: 'POST',
+        url : '/reviews',
+        failOnStatusCode: false ,
+        body: {
+          title: 'fonctionnelle',
+          comment: "a".repeat(507),
+          rating: 5,
+        },
 
+        headers : {
+            Authorization: 'Bearer ' + token
+        }
+      })
+      .then((orders) => {       
+          expect(orders.status).to.eq(400);   
 
-
-    
-
+        });
+      })
+    })   
 
 
 
