@@ -69,7 +69,6 @@ Cypress.Commands.add('login', () => {
   .parent()
   .find('button')  
   .should("be.visible")
- // .wait(1000) 
   .click() 
   
 })
