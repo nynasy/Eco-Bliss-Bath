@@ -33,7 +33,7 @@ describe("Api panier", () => {
       })
       .then((orders) => {
           console.log(cy.getLocalStorage('token'))
-          expect(orders.status).to.eq(200);   
+          expect(orders.status).to.eq(200);
 
           expect(orders.body.id).to.not.be.null
 
@@ -71,6 +71,7 @@ describe("Api panier", () => {
         cy.request({
         method: 'PUT',
         url : 'orders/add',
+        failOnStatusCode: false,
         body: {
           product: '3',
           quantity: '1',

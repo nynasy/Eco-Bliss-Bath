@@ -1,19 +1,7 @@
-describe('Connection', () => {    
-        before(() => {
-          
-          cy.visit('http://localhost:8080')   
-          cy.log('before : ' +  cy.get('a') )
-         
-          cy.get('a').then(($link) => {           
-            cy.log('link : ' + $link.text())
-            if ($link.text().includes('Déconnexion')) {
-                cy.log('link : ' + $link.text())
-                cy.contains("a", "Déconnexion").click()
-            } 
-          })
-        })
+describe('Connection', () => {           
 
-        it('Cliquer sur connexion pour aller à la page de connexion', () => {    
+        it('Se connecter et voir le lien Mon Panier', () => {    
+            cy.visit('http://localhost:8080')   
 
             cy.contains("a", "Connexion")
             .should("have.attr", "href", "#/login")
@@ -21,15 +9,12 @@ describe('Connection', () => {
 
             cy.url().should('eq', Cypress.env('login_url')) 
 
-        })
+            cy.connect()  
 
-        it("Se connecter et vérifier la présence du lien 'Mon panier'", () => {
-            cy.visit(Cypress.env('login_url'))
-            cy.connect()   
-            
             cy.contains("a", "Mon panier")
             .should("have.attr", "href", "#/cart")  
-        })    
 
+        })    
+       
   })
   
