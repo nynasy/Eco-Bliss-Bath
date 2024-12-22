@@ -12,7 +12,7 @@ Installation de :
 
 3. Ouvrez le site depuis la page http://localhost:8080 
 
-4. Configurer mochawesome: npm install mochawesome --save-dev
+4. Installer les dépendances cypress: npm install
 
 5. lancer les tests : 
 5.1. via la commande "npx cypress run" pour lancer tous les tests : le rapport de tests se  trouve dans le dossier cypress/results
