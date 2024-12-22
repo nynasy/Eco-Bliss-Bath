@@ -14,7 +14,12 @@ describe('Ajout panier', () => {
         .should("have.attr", "href", "#/cart")  
 
         cy.log("aller sur la page liste de produits")
+        cy.intercept('GET', 'http://localhost:8081/products').as('products')
+
         cy.visit('http://localhost:8080/#/products')
+        
+        cy.log("attendre que l'api récupère les produits")
+        cy.wait('@products') 
 
         cy.log("cliquer sur un produit disponible : id = 8")
         cy.get('button[ng-reflect-router-link="/products,8"]')
@@ -70,6 +75,7 @@ describe('Ajout panier', () => {
         .type("-1")
 
         cy.get('[data-cy=detail-product-form]')
+        .should("be.visible")
         .should('have.class', 'ng-invalid')          
 
     })
@@ -83,8 +89,8 @@ describe('Ajout panier', () => {
         .type("21")
 
         cy.get('[data-cy=detail-product-form]')
+        .should("be.visible")
         .should('have.class', 'ng-invalid')
-           
 
     }) 
 
