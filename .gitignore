@@ -1,0 +1,5 @@
+mysql/
+node_modules/
+cypress/results/
+cypress/screenshots/
+yarn.lock
