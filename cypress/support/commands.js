@@ -21,7 +21,6 @@ Cypress.Commands.add('login', () => {
   cy.login()
   
   cy.getLocalStorage('token').then(token => {
-    console.log('token', token)
  
     cy.request(
       {
